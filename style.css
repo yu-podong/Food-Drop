@@ -1,0 +1,99 @@
+body {
+  display: flex;
+  flex-direction: row;
+}
+
+/* 캔버스 */
+.game-display {
+  position: relative;
+}
+
+/* 게임 메인 화면 */
+.main-screen {
+  position: absolute;
+}
+
+.main-screen .btn-wrap {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: -384px;
+  left: 82px;
+}
+
+.main-screen .startBtn,
+.main-screen .descriptBtn {
+  width: 245px;
+  height: 45px;
+  background: #ffffff00;
+  border: none;
+  margin-bottom: 30px;
+}
+
+.main-screen .startBtn:hover,
+.main-screen .descriptBtn:hover {
+  cursor: pointer;
+}
+
+/* 게임 설명 화면 */
+.descript-screen {
+  position: absolute;
+  display: none;
+}
+
+.descript-screen .backBtn {
+  width: 116px;
+  height: 28px;
+  position: relative;
+  top: -758px;
+  left: -389px;
+  border: none;
+  background-color: #ffffff00;
+}
+
+.descript-screen .backBtn:hover {
+  cursor: pointer;
+}
+
+.game-over-screen {
+  position: absolute;
+  display: none;
+}
+
+.game-over-screen .btn-wrap {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  top: -254px;
+  left: 78px;
+  width: fit-content;
+}
+
+.game-over-screen .back-mainBtn,
+.game-over-screen .re-startBtn {
+  width: 245px;
+  height: 46px;
+  background-color: #ffffff00;
+  margin-bottom: 23px;
+  border: none;
+}
+
+.game-over-screen .back-mainBtn:hover,
+.game-over-screen .re-startBtn:hover {
+  cursor: pointer;
+}
+
+.score {
+  position: absolute;
+  display: none;
+  top: 15px;
+  left: 20px;
+}
+
+.score-result {
+  position: relative;
+  display: none;
+  top: -308px;
+  left: 188px;
+  font-size: 21px;
+}

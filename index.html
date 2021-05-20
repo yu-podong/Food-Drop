@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./main.js" defer></script>
+    <title>Food Drop</title>
+  </head>
+  <body onload="init()">   
+    <!-- 캔버스 --> 
+    <canvas class="game-display" width="400" height="800"></canvas>
+
+    <!-- 점수판 -->
+    <div class="score">score : </div>
+
+    <!-- 게임 메인 -->
+    <div class="main-screen">
+      <!-- 게임 메인 배경 화면-->
+      <img src="./resource/background/start.png" alt="" class="main-background">
+      <!-- 메인 화면 버튼들-->
+      <div class="btn-wrap">
+        <button class="startBtn" onclick="gameStart()"></button>
+        <button class="descriptBtn" onclick="displayDescript()"></button>
+      </div>
+    </div>
+
+    <!-- 게임 설명 -->
+    <div class="descript-screen">
+      <img src="./resource/background/description.png" alt="">
+      <button class="backBtn" onclick="backAction()"></button>
+    </div>
+
+    <!-- 게임 오버 화면 -->
+    <div class="game-over-screen">
+      <img src="./resource/background/end.png" alt="">
+      <span class="score-result"></span>
+      <div class="btn-wrap">
+        <button class="re-startBtn" onclick="gameStart()"></button>
+        <button class="back-mainBtn" onclick="backMain()"></button>
+      </div>
+    </div>
+  </body>
+</html>
