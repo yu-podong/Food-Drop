@@ -38,12 +38,8 @@ let notFoodSrcList = [
 ];
 
 // random 범위를 결정해줄 변수 (시간이 지날수록 수의 크기를 줄여서 더 많은 item이 나오도록 할 것)
-let randomRange1 = 600;
+let randomRange1 = 500;
 let randomRange2 = 600;
-
-// 생성할 수 item의 개수를 저장하는 변수
-let numFood = 1;
-let numNonFood = 1;
 
 // 생성할 수 있는 item의 개수를 증가한 횟수를 저장하는 변수 (난이도 변경 횟수)
 let foodCount = 0;
@@ -66,7 +62,7 @@ function makePlayer() {
   player.life = 8;
   player.positionX = 0;
   player.positionY = 0;
-  player.moveSpeed = 3;
+  player.moveSpeed = 4;
   player.score = 0;
   player.isNoLife = false;
   player.pushLeft = false;
@@ -74,7 +70,7 @@ function makePlayer() {
 
   // 플레이어의 초기 위치 설정
   player.positionX = (400 / 2) - 50;
-  player.positionY = 600;
+  player.positionY = 650;
 }
 
 // 입력된 key에 따라 해당하는 함수를 실행할 listener 등록
@@ -149,26 +145,26 @@ function drawPlayer() {
 function MakeFoodItem() {
   // 생성할 Item의 개수를 랜덤으로 설정 (1 ~ randomRange1)
   // score가 올라갈수록 random 범위를 좁혀서 더 자주 item이 나오도록 조정
-  let num = Math.floor(Math.random() * randomRange1) + 1;
+  let num = Math.floor(Math.random() * randomRange1 + 1) ;
   
   // 매 interval마다 item이 우후죽순으로 생겨나는 것을 방지(없으면 엄청난 일 발생)
   // 조금 다양한 set으로 item들이 나오기 위해 numFood개 이하의 item이 생길 수 있도록 설정
-  if(num > numFood) {
+  if(num > 2) {
     return;
   }
   
-  // 일정 score를 얻게되면, 내려오는 item 개수 증가
+  // 일정 score를 얻게되면, randomRange를 줄여서 num > numFood를 더 자주 충족하여
+  // item이 자주 떨어지도록 함
   if(player.score > 100 && foodCount == 0) {
-    numFood++;
+    randomRange1 -= 100;
     foodCount++;
   }
-  // 일정 score를 얻으면, 내려오는 item 개수 증가 & random 범위 변경
+  // 일정 score를 얻게되면, randomRange를 줄여서 num > numFood를 더 자주 충족하여
+  // item이 자주 떨어지도록 함
   else if(player.score > 500 && foodCount == 1) {
     randomRange1 -= 100;
-    numFood++;
     foodCount++;
   }
-
   // num개 만큼 food item 생성
   for(let i = 0; i < num; i++) {
     // drop할 item 생성 (초기값 설정)
@@ -181,7 +177,7 @@ function MakeFoodItem() {
     }
 
     // 500점이 넘을 시 item의 속도 변화
-    if(foodCount == 1) {
+    if(foodCount == 2) {
       item.dropSpeed++;
     }
     
@@ -195,14 +191,17 @@ function MakeFoodItem() {
       item.positionX = Math.floor(Math.random() * 350 + 1);
       item.positionY = 0;
     }
-    // 첫번째 이후의 item들은 첫번째 item 근처에서 생성되도록 설정
-    else if (i > 0 && foodItemList[0].positionX > 200){
-      item.positionX = Math.floor(Math.random() * 200 + (foodItemList[0].positionX - 200));
-      item.positionY = Math.floor(Math.random() * 200 + 1);
+    // 첫번째 이후의 item들은 첫번째 item 근처에서 생성되도록 설정 
+    // (첫번쨰 item에서 반경 200안에 새로운 item들이 생성)
+    else if (i > 0 && foodItemList[0].positionX >= 200){
+      item.positionX = Math.floor(foodItemList[0].positionX - (Math.random() * 150 + 50));
+      // 최소한 첫번째 item과 i번째 item가 수직상에서 거리가 50~199 차이나도록 설정
+      // (item이 수평선상에서 동일한 위치에 있으면 여러 개 먹기 힘듬)
+      item.positionY = -Math.floor(Math.random() * 150 + 50);
     }
     else if(i > 0 && foodItemList[0].positionX < 200) {
-      item.positionX = Math.floor(Math.random() * 200 + (foodItemList[0].positionX + 200));
-      item.positionY = -Math.floor(Math.random() * 200 + 1);
+      item.positionX = Math.floor((Math.random() * 150 + 50) + foodItemList[0].positionX );
+      item.positionY = -Math.floor(Math.random() * 150 + 50);
     }
     
     // food list에 추가
@@ -212,10 +211,12 @@ function MakeFoodItem() {
 
 // non-food item 생성
 function MakeNonFoodItem() {
-  let num = Math.floor(Math.random() * randomRange2);
+  // 생성할 Item의 개수를 랜덤으로 설정 (1 ~ randomRange2)
+  // score가 올라갈수록 random 범위를 좁혀서 더 자주 item이 나오도록 조정
+  let num = Math.floor(Math.random() * randomRange2 + 1);
 
   // 매 interval마다 item이 우후죽순으로 생겨나는 것을 방지 (1개로 고정)
-  if(num != numNonFood) {
+  if(num != 1) {
     return;
   }
 
@@ -236,7 +237,7 @@ function MakeNonFoodItem() {
   };
 
   // food item과 동일하게 500점이 넘으면 non-food item의 속도 증가
-  if(nonFoodCount == 1) {
+  if(nonFoodCount == 2) {
     item.dropSpeed++;
   }
 
@@ -274,7 +275,7 @@ function crashItem() {
   // foodItem 중에서
   for(let i = 0; i < foodItemList.length; i++) {
     // 먄약, 플레이어가 먹은 아이템이 food일 경우, player의 score +10
-    if(player.positionX+50 > foodItemList[i].positionX && player.positionX + 50 < foodItemList[i].positionX + 50 && player.positionY < foodItemList[i].positionY + 50 && player.positionY + 50 > foodItemList[i].positionY + 25) {
+    if(player.positionX+50 > foodItemList[i].positionX && player.positionX + 50 < foodItemList[i].positionX + 50 && player.positionY < foodItemList[i].positionY + 50 && player.positionY + 70 > foodItemList[i].positionY + 25) {
       foodItemList[i].isDead = true;
       player.score += 10;
     }
@@ -413,10 +414,19 @@ function gameStart() {
 }
 
 function init() {
+  // random 범위 지정변수 초기화
+  randomRange1 = 500;
+  randomRange2 = 600;
+
+  // game level 초기화
+  foodCount = 0;
+  nonFoodCount = 0;
+
   // player 생성 및 property 초기화
   makePlayer();
   // item list 초기화
   emptyItems();
+
 }
 
 
